@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ConfigurationService;
 using ConfigurationService.Persistence;
 using NUnit.Framework;
@@ -37,7 +34,7 @@ namespace ConfigurationServiceTests
 
         private Configuration GetFakeConfig(int i)
         {
-            return new Configuration() {Instance = "inst" + i, Key = "key" + i, Value = "value" + i};
+            return new Configuration() { Instance = "inst" + i, Key = "key" + i, Value = "value" + i };
         }
     }
 }

@@ -60,10 +60,13 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WebSocketInterface\IRequestFlickerConnection.cs" />
+    <Compile Include="WebSocketInterface\IRequestManager.cs" />
     <Compile Include="WebSocketInterface\IWebsocket.cs" />
     <Compile Include="WebSocketInterface\RequestAnswer.cs" />
     <Compile Include="WebSocketInterface\RequestFlickerConnection.cs" />
     <Compile Include="WebSocketInterface\RequestFlickerService.cs" />
+    <Compile Include="WebSocketInterface\RequestManager.cs" />
+    <Compile Include="WebSocketInterface\RequestType.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
