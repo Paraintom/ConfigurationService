@@ -15,7 +15,7 @@ namespace ConfigurationServiceTests
             string badMessage = "ha ha, not a Json request!";
             FakeWebsocket w = new FakeWebsocket();
             IRequestManager<ConfigurationSubscription, ConfigurationUpdate> totest =
-                new RequestManager<ConfigurationSubscription, ConfigurationUpdate>(w, RequestType.REGISTER);
+                new RequestManager<ConfigurationSubscription, ConfigurationUpdate>(w);
             totest.OnRequest += (sender, message) => requestReceived++;
             //Test when we receive shitty data
             w.SimulateReceived(badMessage);
@@ -26,32 +26,29 @@ namespace ConfigurationServiceTests
         [Test]
         public void GoodRequestWithBadTypeIsIgnored()
         {
-            var expectedRequestType = RequestType.REGISTER;
-            string inputType = "SomethingElse!";
-            TestWith(expectedRequestType, inputType);
+            TestWith(false);
         }
 
         [Test]
         public void GoodRequestIsForwarded()
         {
-            var expectedRequestType = RequestType.REGISTER;
-            string inputType = expectedRequestType.ToString();
-            TestWith(expectedRequestType, inputType);
+            TestWith(true);
         }
 
-        private void TestWith(RequestType expectedRequestType, string inputType)
+        private void TestWith(bool goodInputType)
         {
             RequestMessage<ConfigurationSubscription>? requestReceived = null;
 
             FakeWebsocket w = new FakeWebsocket();
             IRequestManager<ConfigurationSubscription, ConfigurationUpdate> totest =
-                new RequestManager<ConfigurationSubscription, ConfigurationUpdate>(w, expectedRequestType);
+                new RequestManager<ConfigurationSubscription, ConfigurationUpdate>(w);
+            var expectedRequestType = totest.ExpectedRequestType;
             totest.OnRequest += (sender, subscriptionRequest) => requestReceived = subscriptionRequest;
             //Test when we receive good data
 
 
             var synchRequest = new ConfigurationSubscription();
-            synchRequest.type = inputType;
+            synchRequest.type = goodInputType ? expectedRequestType : "SomethingElse!";
             synchRequest.instance = "SplitonsPersistence";
             var request = new RequestMessage<ConfigurationSubscription>();
             request.id = 12;
@@ -60,7 +57,7 @@ namespace ConfigurationServiceTests
             Write("Receiving " + serializeRequest);
             w.SimulateReceived(serializeRequest);
 
-            if (expectedRequestType.ToString().Equals(inputType, StringComparison.OrdinalIgnoreCase))
+            if (goodInputType)
             {
                 Assert.IsNotNull(requestReceived.HasValue);
                 Assert.AreEqual(request.id, requestReceived.Value.id);

@@ -1,4 +1,6 @@
-﻿namespace ConfigurationService.WebSocketInterface
+﻿using System.Collections.Generic;
+
+namespace ConfigurationService.WebSocketInterface
 {
     public enum RequestType
     {
@@ -11,7 +13,7 @@
         /// <summary>
         /// For allowed values see RequestType.
         /// </summary>
-        string type { get; set; }
+        string type { get; }
     }
 
     public struct ConfigurationSubscription : ITypedRequest
@@ -20,9 +22,15 @@
         public string instance { get; set; }
     }
 
+    public struct ConfigurationSubscriptionAnswer : ITypedRequest
+    {
+        public string type { get { return "ConfigurationSubscriptionAnswer"; } }
+        public List<Configuration> result { get; set; }
+    }
+
     public struct ConfigurationUpdate : ITypedRequest
     {
-        public string type { get; set; }
+        public string type { get { return "ConfigurationUpdate"; } }
         public Configuration update { get; set; }
     }
 }

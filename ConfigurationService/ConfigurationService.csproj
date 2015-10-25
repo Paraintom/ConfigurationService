@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration.cs" />
+    <Compile Include="ConfigurationRequestHandler.cs" />
     <Compile Include="ServiceConfiguration\ConfigurationKeys.cs" />
     <Compile Include="ServiceConfiguration\MyConfiguration.cs" />
     <Compile Include="Events\EventExtentionsMethods.cs" />
@@ -70,6 +71,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

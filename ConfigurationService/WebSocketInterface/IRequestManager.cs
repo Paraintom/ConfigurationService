@@ -7,6 +7,7 @@ namespace ConfigurationService.WebSocketInterface
         where O : ITypedRequest
     {
         event EventHandler<RequestMessage<I>> OnRequest;
+        string ExpectedRequestType { get; }
         void Send(AnwserMessage<O> answer);
     }
 }

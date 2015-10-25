@@ -15,6 +15,7 @@ namespace ConfigurationService.Persistence
         private const string fileName = "configurations";
         private const string tempFileName = fileName + ".temp";
         private const string configurationsFileName = fileName + ".json";
+        private object internalLock = new object();
 
         public void Persist(List<Configuration> transactions)
         {
@@ -32,12 +33,15 @@ namespace ConfigurationService.Persistence
                 }
                 File.AppendAllText(tempFileName, JsonConvert.SerializeObject(transactions));
                 //1 we remove the current state if exist
-                if (File.Exists(configurationsFileName))
+                lock (internalLock)
                 {
-                    Clean();
+                    if (File.Exists(configurationsFileName))
+                    {
+                        Clean();
+                    }
+                    //2 we rename the first state file
+                    File.Move(tempFileName, configurationsFileName);
                 }
-                //2 we rename the first state file
-                File.Move(tempFileName, configurationsFileName);
 
             }
             catch (Exception e)
@@ -55,15 +59,18 @@ namespace ConfigurationService.Persistence
             try
             {
                 log.Debug("Reading configurations.");
-                if (File.Exists(configurationsFileName))
+                lock (internalLock)
                 {
-                    var stringState = File.ReadAllText(configurationsFileName);
-                    var temp = JsonConvert.DeserializeObject<List<Configuration>>(stringState);
-                    temp.ForEach(result.Add);
-                }
-                else
-                {
-                    log.Debug("No file found");
+                    if (File.Exists(configurationsFileName))
+                    {
+                        var stringState = File.ReadAllText(configurationsFileName);
+                        var temp = JsonConvert.DeserializeObject<List<Configuration>>(stringState);
+                        temp.ForEach(result.Add);
+                    }
+                    else
+                    {
+                        log.Debug("No file found");
+                    }
                 }
                 log.Debug("Found {0} configurations", result.Count);
             }
@@ -78,8 +85,11 @@ namespace ConfigurationService.Persistence
 
         public void Clean()
         {
-            log.Info("Deleting the configuration file");
-            File.Delete(configurationsFileName);
+            lock (internalLock)
+            {
+                log.Info("Deleting the configuration file");
+                File.Delete(configurationsFileName);
+            }
         }
     }
 }

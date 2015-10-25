@@ -12,12 +12,12 @@ namespace ConfigurationService.WebSocketInterface
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private IWebsocket Connection;
-        private string expectedRequestType;
-        public RequestManager(IWebsocket connection, RequestType expectedRequestType)
+        public string ExpectedRequestType { get; private set; }
+        public RequestManager(IWebsocket connection)
         {
             this.Connection = connection;
             this.Connection.OnMessage += OnConnectionMessage;
-            this.expectedRequestType = expectedRequestType.ToString();
+            this.ExpectedRequestType = typeof(I).Name;
         }
 
         public event EventHandler<RequestMessage<I>> OnRequest;
@@ -30,7 +30,7 @@ namespace ConfigurationService.WebSocketInterface
 
                 //dynamic request = JObject.Parse(s);
                 string requestTypeString = request.request.type;
-                if (!string.IsNullOrEmpty(requestTypeString) && expectedRequestType.Equals(requestTypeString, StringComparison.OrdinalIgnoreCase))
+                if (!string.IsNullOrEmpty(requestTypeString) && ExpectedRequestType.Equals(requestTypeString, StringComparison.OrdinalIgnoreCase))
                 {
                     logger.Info("Request {1} received of type {0}", request.request.type, request.id);
 
