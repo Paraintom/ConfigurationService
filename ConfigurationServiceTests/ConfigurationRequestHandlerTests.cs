@@ -33,11 +33,12 @@ namespace ConfigurationServiceTests
 
             //Creating a fake requestmanager.
             var subscriptionsRequest = new Mock<IRequestManager<ConfigurationSubscription, ConfigurationSubscriptionAnswer>>();
+            var updateRequest = new Mock<IRequestManager<ConfigurationUpdate, ConfigurationUpdateAnswer>>();
             var allAnswerSent = new List<AnwserMessage<ConfigurationSubscriptionAnswer>>();
             subscriptionsRequest.Setup(o => o.Send(It.IsAny<AnwserMessage<ConfigurationSubscriptionAnswer>>())).
                 Callback<AnwserMessage<ConfigurationSubscriptionAnswer>>(allAnswerSent.Add);
 
-            var toTest = new ConfigurationRequestHandler(subscriptionsRequest.Object, statePersister.Object);
+            var toTest = new ConfigurationRequestHandler(subscriptionsRequest.Object, updateRequest.Object, statePersister.Object);
             
             //Sending a request to the manager
             var requestId = 1021;

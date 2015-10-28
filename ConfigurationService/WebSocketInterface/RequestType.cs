@@ -30,7 +30,12 @@ namespace ConfigurationService.WebSocketInterface
 
     public struct ConfigurationUpdate : ITypedRequest
     {
-        public string type { get { return "ConfigurationUpdate"; } }
+        public string type { get; set; }
         public Configuration update { get; set; }
+    }
+    public struct ConfigurationUpdateAnswer : ITypedRequest
+    {
+        public string type { get { return "ConfigurationUpdateAnswer"; } }
+        public bool result { get; set; }
     }
 }
