@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using ConfigurationService;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
@@ -32,5 +33,9 @@ namespace ConfigurationServiceTests
             Debug.WriteLine(message);
         }
 
+        protected Configuration GetFakeConfig(int i)
+        {
+            return new Configuration() { Instance = "inst" + i, Key = "key" + i, Value = "value" + i };
+        }
     }
 }

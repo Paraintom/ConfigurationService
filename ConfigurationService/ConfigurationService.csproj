@@ -66,7 +66,7 @@
     <Compile Include="WebSocketInterface\RequestAnswer.cs" />
     <Compile Include="WebSocketInterface\RequestFlickerConnection.cs" />
     <Compile Include="WebSocketInterface\RequestFlickerService.cs" />
-    <Compile Include="WebSocketInterface\RequestManager.cs" />
+    <Compile Include="WebSocketInterface\JsonRequestManager.cs" />
     <Compile Include="WebSocketInterface\RequestType.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -31,10 +31,6 @@ namespace ConfigurationServiceTests
             Assert.AreEqual(result.Count, configurations.Count);
             Assert.IsTrue(result.All(configurations.Contains));
         }
-
-        private Configuration GetFakeConfig(int i)
-        {
-            return new Configuration() { Instance = "inst" + i, Key = "key" + i, Value = "value" + i };
-        }
+        
     }
 }

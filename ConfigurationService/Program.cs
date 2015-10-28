@@ -13,10 +13,10 @@ namespace ConfigurationService
         {
             logger.Info("Starting application");
             IWebsocket connection = new RequestFlickerService("ConfigurationService");
-            IRequestManager<ConfigurationSubscription, ConfigurationSubscriptionAnswer> requestSubscriptionManager = 
-                new RequestManager<ConfigurationSubscription, ConfigurationSubscriptionAnswer>(connection);
+            IRequestManager<ConfigurationSubscription, ConfigurationSubscriptionAnswer> subscriptionsRequestManager = 
+                new JsonRequestManager<ConfigurationSubscription, ConfigurationSubscriptionAnswer>(connection);
 
-            var requestHandler = new ConfigurationRequestHandler(requestSubscriptionManager, new StatePersister());
+            var requestHandler = new ConfigurationRequestHandler(subscriptionsRequestManager, new StatePersister());
 
             while (true)
             {

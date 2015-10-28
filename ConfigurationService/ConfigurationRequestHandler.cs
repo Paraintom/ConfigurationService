@@ -7,19 +7,19 @@ namespace ConfigurationService
 {
     public class ConfigurationRequestHandler
     {
-        private IRequestManager<ConfigurationSubscription, ConfigurationSubscriptionAnswer> subscriptionsRequest;
+        private readonly IRequestManager<ConfigurationSubscription, ConfigurationSubscriptionAnswer> subscriptionsRequestSource;
         private IStatePersister persister;
         private List<Configuration> allConfigurations;
         public const string ConfigurationInstanceWildcard = "*";
 
         public ConfigurationRequestHandler(
-            IRequestManager<ConfigurationSubscription, ConfigurationSubscriptionAnswer> subscriptionsRequest,
+            IRequestManager<ConfigurationSubscription, ConfigurationSubscriptionAnswer> subscriptionsRequestSource,
             IStatePersister persister)
         {
-            this.subscriptionsRequest = subscriptionsRequest;
+            this.subscriptionsRequestSource = subscriptionsRequestSource;
             this.persister = persister;
             this.allConfigurations = persister.Read();
-            subscriptionsRequest.OnRequest += (sender, message) => OnNewRequest(message);
+            subscriptionsRequestSource.OnRequest += (sender, message) => OnNewRequest(message);
         }
 
         private void OnNewRequest(RequestMessage<ConfigurationSubscription> request)
@@ -30,7 +30,7 @@ namespace ConfigurationService
                 allConfigurations : 
                 allConfigurations.Where(o => o.Instance == instanceFilter);
 
-            subscriptionsRequest.Send(new AnwserMessage<ConfigurationSubscriptionAnswer>()
+            subscriptionsRequestSource.Send(new AnwserMessage<ConfigurationSubscriptionAnswer>()
             {
                 id = request.id,
                 answer = new ConfigurationSubscriptionAnswer()

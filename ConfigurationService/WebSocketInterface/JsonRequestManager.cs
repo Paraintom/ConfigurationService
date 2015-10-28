@@ -6,14 +6,14 @@ using NLog;
 namespace ConfigurationService.WebSocketInterface
 {
 
-    public class RequestManager<I, O> : IRequestManager<I, O> 
+    public class JsonRequestManager<I, O> : IRequestManager<I, O> 
         where I : ITypedRequest
         where O : ITypedRequest
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private IWebsocket Connection;
         public string ExpectedRequestType { get; private set; }
-        public RequestManager(IWebsocket connection)
+        public JsonRequestManager(IWebsocket connection)
         {
             this.Connection = connection;
             this.Connection.OnMessage += OnConnectionMessage;
